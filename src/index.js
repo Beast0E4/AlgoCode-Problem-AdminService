@@ -3,7 +3,7 @@ const { PORT } = require('./config/server.config');
 const bodyParser = require('body-parser');
 const apiRouter = require('./routes');
 const BaseError = require('./errors/base.error');
-const errorHandler = require('./utils/errorHandler');
+const { errorHandler } = require('./utils');
 const connectToDb = require('./config/db.config');
 
 const app = express();
