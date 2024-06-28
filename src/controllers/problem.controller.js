@@ -2,6 +2,7 @@ const BadRequest = require('../errors/badrequest.error')
 const { ProblemService } = require('../services')
 const { ProblemRepository } = require('../repositories');
 const { StatusCodes } = require('http-status-codes');
+const NotFound = require('../errors/notfound.error');
 
 const problemService = new ProblemService(new ProblemRepository());
 
@@ -12,7 +13,6 @@ function pingProblem(req, res){
 
 async function addProblem(req, res, next) {
     try {
-        console.log("Incoming req body", req.body);
         const newproblem = await problemService.createProblem(req.body);
         return res.status(StatusCodes.CREATED).json({
             success: true,
@@ -21,7 +21,6 @@ async function addProblem(req, res, next) {
             data: newproblem
         });
     } catch (error) {
-        console.log('fuck', error);
         next(error);
     }
 }
@@ -40,9 +39,15 @@ async function getProblems(req, res, next) {
     }
 }
 
-function getProblem(req, res, next) {
+async function getProblem(req, res, next) {
     try {
-        throw new BadRequest('Problem Name', {missing: "Problem Name"});
+        const problem = await problemService.getProblem(req.params.id);
+        return res.status(StatusCodes.OK).json({
+            success: true,
+            message: "Successfully fetched the problem",
+            error: {},
+            data: problem
+        });
     } catch (error) {
         next(error);
     }
