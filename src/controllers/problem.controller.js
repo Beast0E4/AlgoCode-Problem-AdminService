@@ -26,15 +26,21 @@ async function addProblem(req, res, next) {
     }
 }
 
-function getProblem(req, res, next) {
+async function getProblems(req, res, next) {
     try {
-        throw new BadRequest('Problem Name', {missing: "Problem Name"});
+        const problems = await problemService.getProblems();
+        return res.status(StatusCodes.OK).json({
+            success: true,
+            message: "Successfully fetched all problems",
+            error: {},
+            data: problems
+        });
     } catch (error) {
         next(error);
     }
 }
 
-function getProblems(req, res, next) {
+function getProblem(req, res, next) {
     try {
         throw new BadRequest('Problem Name', {missing: "Problem Name"});
     } catch (error) {
